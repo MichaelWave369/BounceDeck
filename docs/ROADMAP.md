@@ -21,6 +21,7 @@
 - [x] Stable path-derived library track IDs
 - [x] Main-process-only absolute filesystem paths
 - [x] `bounce-media://` id-gated streaming protocol
+- [x] Reduced media-protocol privileges with renderer Fetch API access disabled
 - [x] Filename metadata bootstrap (`Artist - Title`)
 - [x] Typed deck event bus (`analysis`, `playback`, `track`)
 - [x] Rolling bounded analysis summary for companion context
@@ -29,6 +30,8 @@
 - [x] OS media-session controls and seek position
 - [x] Persistent volume / EQ / visualizer / companion settings
 - [x] CI coverage for all `bouncdeck-v*` branches
+- [x] Upgrade desktop runtime to Electron 44.2.0
+- [x] Dependency audit cleanup: 0 vulnerabilities in v0.2 CI
 
 ### Remaining v0.2.x work
 
@@ -40,7 +43,6 @@
 - [ ] Shader preset interface and original preset packs
 - [ ] Keyboard shortcuts beyond OS media keys
 - [ ] Companion auto-comment policy with a real silence budget
-- [ ] Dependency-audit cleanup before packaged release claims
 
 ## v0.3 — Listening intelligence
 
