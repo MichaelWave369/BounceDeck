@@ -10,20 +10,28 @@ interface Controls {
   seekBy: (seconds: number) => void;
 }
 
-export function useMediaSession(track: Track | undefined, playing: boolean, controls: Controls) {
+type ActionHandler = ((details: MediaSessionActionDetails) => void) | null;
+
+export function useMediaSession(
+  track: Track | undefined,
+  playing: boolean,
+  currentTime: number,
+  duration: number,
+  controls: Controls,
+) {
   useEffect(() => {
     if (!('mediaSession' in navigator)) return;
 
     navigator.mediaSession.metadata = track
       ? new MediaMetadata({
           title: track.title || track.name,
-          artist: track.artist || 'BounceDeck local library',
+          artist: track.artist || 'BounceDeck local audio',
           album: 'BounceDeck',
         })
       : null;
     navigator.mediaSession.playbackState = track ? (playing ? 'playing' : 'paused') : 'none';
 
-    const register = (action: MediaSessionAction, handler: MediaSessionActionHandler | null) => {
+    const register = (action: MediaSessionAction, handler: ActionHandler) => {
       try {
         navigator.mediaSession.setActionHandler(action, handler);
       } catch {
@@ -31,10 +39,10 @@ export function useMediaSession(track: Track | undefined, playing: boolean, cont
       }
     };
 
-    register('play', controls.play);
-    register('pause', controls.pause);
-    register('previoustrack', controls.previous);
-    register('nexttrack', controls.next);
+    register('play', () => controls.play());
+    register('pause', () => controls.pause());
+    register('previoustrack', () => controls.previous());
+    register('nexttrack', () => controls.next());
     register('seekto', (details) => {
       if (typeof details.seekTime === 'number') controls.seekTo(details.seekTime);
     });
@@ -51,4 +59,17 @@ export function useMediaSession(track: Track | undefined, playing: boolean, cont
       register('seekforward', null);
     };
   }, [controls, playing, track]);
+
+  useEffect(() => {
+    if (!('mediaSession' in navigator) || !track || !Number.isFinite(duration) || duration <= 0) return;
+    try {
+      navigator.mediaSession.setPositionState({
+        duration,
+        playbackRate: 1,
+        position: Math.max(0, Math.min(currentTime, duration)),
+      });
+    } catch {
+      // Position state is optional platform chrome, never a playback dependency.
+    }
+  }, [currentTime, duration, track]);
 }
