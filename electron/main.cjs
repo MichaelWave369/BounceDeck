@@ -17,7 +17,6 @@ protocol.registerSchemesAsPrivileged([
     privileges: {
       standard: true,
       secure: true,
-      supportFetchAPI: true,
       stream: true,
     },
   },
@@ -203,11 +202,14 @@ ipcMain.handle('library:get', async () => {
 
 ipcMain.handle('library:add-folder', async (event) => {
   await ensureLibraryLoaded();
-  const owner = BrowserWindow.fromWebContents(event.sender) || undefined;
-  const result = await dialog.showOpenDialog(owner, {
+  const owner = BrowserWindow.fromWebContents(event.sender);
+  const options = {
     title: 'Add a music folder to BounceDeck',
     properties: ['openDirectory'],
-  });
+  };
+  const result = owner
+    ? await dialog.showOpenDialog(owner, options)
+    : await dialog.showOpenDialog(options);
   if (result.canceled || !result.filePaths[0]) return publicLibraryState();
 
   const selected = path.resolve(result.filePaths[0]);
