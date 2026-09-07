@@ -125,6 +125,56 @@
   background: rgba(109,255,210,.06);
 }
 
+/* GitHub Pages / browser runtime: keep the UI honest about what is available. */
+html[data-bouncdeck-runtime="web"] .topbar .eyebrow,
+html[data-bouncdeck-runtime="web"] .library .panel-heading .eyebrow {
+  font-size: 0;
+}
+
+html[data-bouncdeck-runtime="web"] .topbar .eyebrow::after {
+  content: 'WEB AUDIO ENVIRONMENT // v0.2';
+  font-size: 10px;
+}
+
+html[data-bouncdeck-runtime="web"] .library .panel-heading .eyebrow::after {
+  content: 'WEB SESSION LIBRARY';
+  font-size: 10px;
+}
+
+html[data-bouncdeck-runtime="web"] .library-actions .add-button:nth-child(1),
+html[data-bouncdeck-runtime="web"] .library-actions .add-button:nth-child(2),
+html[data-bouncdeck-runtime="web"] .library-meta button {
+  display: none;
+}
+
+html[data-bouncdeck-runtime="web"] .library-meta span {
+  font-size: 0;
+}
+
+html[data-bouncdeck-runtime="web"] .library-meta span::after {
+  content: 'WEB SESSION // AUDIO STAYS IN THIS TAB // SETTINGS SAVE LOCALLY';
+  font-size: 8px;
+}
+
+html[data-bouncdeck-runtime="web"] .drop-zone {
+  font-size: 0;
+}
+
+html[data-bouncdeck-runtime="web"] .drop-zone::before {
+  content: 'DROP AUDIO HERE OR ADD FILES';
+  display: block;
+  font-size: 10px;
+}
+
+html[data-bouncdeck-runtime="web"] .drop-zone small {
+  font-size: 0;
+}
+
+html[data-bouncdeck-runtime="web"] .drop-zone small::after {
+  content: 'Files stay in your browser session. BounceDeck does not upload them.';
+  font-size: 9px;
+}
+
 @media (max-width: 700px) {
   .visualizer-actions {
     width: 100%;
