@@ -1,6 +1,6 @@
 {
   "name": "bouncdeck",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "A local-first music player, reactive visualizer, and AI listening companion.",
   "main": "electron/main.cjs",
@@ -25,7 +25,7 @@
     "@vitejs/plugin-react": "^5.0.2",
     "concurrently": "^9.2.1",
     "cross-env": "^10.0.0",
-    "electron": "^37.3.1",
+    "electron": "^44.2.0",
     "typescript": "^5.9.2",
     "vite": "^7.1.4",
     "wait-on": "^8.0.4"

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import type { AudioEngine } from '../audio/AudioEngine';
 import type { VisualizerMode } from '../types';
+import { ShaderVisualizer } from './ShaderVisualizer';
 
 interface Props {
   engine: AudioEngine;
@@ -9,6 +10,11 @@ interface Props {
 }
 
 export function Visualizer({ engine, mode, active }: Props) {
+  if (mode === 'plasma') return <ShaderVisualizer engine={engine} active={active} />;
+  return <CanvasVisualizer engine={engine} mode={mode} active={active} />;
+}
+
+function CanvasVisualizer({ engine, mode, active }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -17,8 +23,8 @@ export function Visualizer({ engine, mode, active }: Props) {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const frequency = new Uint8Array(engine.frequencyBinCount);
-    const time = new Uint8Array(engine.frequencyBinCount);
+    const frequency = new Uint8Array(new ArrayBuffer(engine.frequencyBinCount));
+    const time = new Uint8Array(new ArrayBuffer(engine.frequencyBinCount));
     let raf = 0;
 
     const resize = () => {
@@ -74,7 +80,6 @@ function drawSpectrum(
   const bars = Math.min(96, Math.max(28, Math.floor(width / 9)));
   const gap = 2;
   const barWidth = Math.max(2, width / bars - gap);
-
   for (let i = 0; i < bars; i += 1) {
     const sourceIndex = Math.floor((i / bars) * data.length * 0.68);
     const value = active ? data[sourceIndex] / 255 : 0.035 + Math.sin(i * 0.55) * 0.015;
@@ -85,7 +90,6 @@ function drawSpectrum(
     ctx.fillStyle = `hsla(${hue}, 88%, 62%, ${0.45 + value * 0.5})`;
     ctx.fillRect(x, y, barWidth, barHeight);
   }
-
   ctx.fillStyle = 'rgba(255,255,255,0.32)';
   ctx.font = '11px ui-monospace, monospace';
   ctx.fillText(active ? 'LIVE FFT // 2048' : 'FFT STANDBY', 18, 24);
@@ -110,7 +114,6 @@ function drawScope(
     else ctx.lineTo(x, y);
   });
   ctx.stroke();
-
   ctx.strokeStyle = 'rgba(111, 255, 213, 0.13)';
   ctx.beginPath();
   ctx.moveTo(0, height / 2);
@@ -129,7 +132,6 @@ function drawOrbital(
   const cy = height / 2;
   const baseRadius = Math.min(width, height) * 0.18;
   const points = 140;
-
   for (let i = 0; i < points; i += 1) {
     const sourceIndex = Math.floor((i / points) * data.length * 0.72);
     const energy = active ? data[sourceIndex] / 255 : 0.04;
@@ -142,7 +144,6 @@ function drawOrbital(
     ctx.arc(x, y, 1.2 + energy * 3.4, 0, Math.PI * 2);
     ctx.fill();
   }
-
   const glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, baseRadius * 1.45);
   glow.addColorStop(0, 'rgba(101, 255, 211, 0.19)');
   glow.addColorStop(1, 'rgba(101, 255, 211, 0)');

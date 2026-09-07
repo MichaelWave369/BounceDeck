@@ -2,7 +2,7 @@ name: BounceDeck CI
 
 on:
   push:
-    branches: [main, bouncdeck-v0.1]
+    branches: [main, 'bouncdeck-v*']
   pull_request:
     branches: [main]
 

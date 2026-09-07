@@ -1,0 +1,140 @@
+.visualizer-actions {
+  pointer-events: auto;
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+}
+
+.fullscreen-button {
+  border: 1px solid rgba(255,255,255,.1);
+  background: rgba(5,8,10,.72);
+  color: #94a39f;
+  padding: 10px 9px;
+  border-radius: 9px;
+  font: 800 8px ui-monospace, monospace;
+  letter-spacing: .08em;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+}
+
+.visualizer-panel:fullscreen {
+  width: 100vw;
+  height: 100vh;
+  border: 0;
+  border-radius: 0;
+  background: #050709;
+}
+
+.visualizer-panel:fullscreen .visualizer-overlay {
+  padding: 28px;
+}
+
+.shader-visualizer {
+  position: absolute;
+  inset: 0;
+}
+
+.shader-fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #65736f;
+  font: 800 10px ui-monospace, monospace;
+  letter-spacing: .12em;
+}
+
+.now-artist {
+  margin-top: 5px;
+  color: #7b8a86;
+  font-size: 12px;
+}
+
+.library-actions {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.add-button:disabled {
+  opacity: .4;
+  cursor: default;
+}
+
+.library-meta {
+  min-height: 20px;
+  margin-top: 8px;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: center;
+  color: #5f6c68;
+  font: 700 8px ui-monospace, monospace;
+  letter-spacing: .05em;
+}
+
+.library-meta button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #715f63;
+  font: inherit;
+  cursor: pointer;
+}
+
+.library-error {
+  margin-top: 5px;
+  color: #dc8d83;
+  font: 800 8px ui-monospace, monospace;
+}
+
+.track-list {
+  max-height: calc(100% - 70px);
+}
+
+.track-row.v02 {
+  grid-template-columns: 34px minmax(0, 1fr) 34px 44px;
+}
+
+.track-title-stack {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.track-title-stack small {
+  overflow: hidden;
+  color: #5f6c68;
+  font: 8px ui-monospace, monospace;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.track-source {
+  justify-self: end;
+  padding: 3px 4px;
+  border-radius: 4px;
+  color: #64726e;
+  background: rgba(255,255,255,.035);
+  font: 800 7px ui-monospace, monospace;
+}
+
+.track-source.library {
+  color: #66bfa4;
+  background: rgba(109,255,210,.06);
+}
+
+@media (max-width: 700px) {
+  .visualizer-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+  .mode-switcher {
+    overflow-x: auto;
+    max-width: calc(100% - 55px);
+  }
+  .track-row.v02 {
+    grid-template-columns: 28px minmax(0, 1fr) 30px 38px;
+  }
+}
