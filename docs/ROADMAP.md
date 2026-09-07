@@ -14,44 +14,62 @@
 
 ## v0.2 — Library and visualizer system
 
-- Metadata parsing (artist, album, embedded artwork)
-- Persistent library index
-- Folder scanning through bounded Electron IPC
-- Gapless playback and crossfade options
-- Saved EQ presets
-- GPU shader visualizer API
-- MilkDrop-inspired preset architecture using original shaders
-- Fullscreen visualizer mode
-- Keyboard shortcuts and media keys
-- Companion auto-comment policy with a real silence budget
+### Landed in the v0.2 branch
+
+- [x] Persistent library index in Electron app data
+- [x] Recursive folder scanning through bounded Electron IPC
+- [x] Stable path-derived library track IDs
+- [x] Main-process-only absolute filesystem paths
+- [x] `bounce-media://` id-gated streaming protocol
+- [x] Filename metadata bootstrap (`Artist - Title`)
+- [x] Typed deck event bus (`analysis`, `playback`, `track`)
+- [x] Rolling bounded analysis summary for companion context
+- [x] First original GPU fragment-shader visualizer (`plasma`)
+- [x] Fullscreen visualizer mode
+- [x] OS media-session controls and seek position
+- [x] Persistent volume / EQ / visualizer / companion settings
+- [x] CI coverage for all `bouncdeck-v*` branches
+
+### Remaining v0.2.x work
+
+- [ ] Full tag metadata parsing (artist / album / track number)
+- [ ] Embedded artwork extraction and cache
+- [ ] Gapless playback
+- [ ] Optional crossfade engine
+- [ ] Named EQ presets
+- [ ] Shader preset interface and original preset packs
+- [ ] Keyboard shortcuts beyond OS media keys
+- [ ] Companion auto-comment policy with a real silence budget
+- [ ] Dependency-audit cleanup before packaged release claims
 
 ## v0.3 — Listening intelligence
 
-- Beat / onset / section-change analysis
-- Timestamp bookmarks (“remember this part”)
-- Session listening journal
-- Companion context receipts visible in UI
-- Optional local embeddings for personal library search
-- Provider adapters and per-provider capability declaration
-- Explicit tool permissions for queue/search/visualizer actions
+- [ ] Beat / onset detection
+- [ ] Section-change candidates
+- [ ] Timestamp bookmarks (“remember this part”)
+- [ ] Session listening journal
+- [ ] Companion context receipts visible in UI
+- [ ] Optional local embeddings for personal library search
+- [ ] Provider adapters and per-provider capability declaration
+- [ ] Explicit tool permissions for queue/search/visualizer actions
 
 ## v0.4 — AI DJ, bounded
 
-- Queue and playlist suggestion tools
-- Mood / energy trajectory planning
-- Transition recommendations
-- Visualizer scene selection
-- Tool-call approval policy
-- Audit log for every companion-initiated action
+- [ ] Queue and playlist suggestion tools
+- [ ] Mood / energy trajectory planning
+- [ ] Transition recommendations
+- [ ] Visualizer scene selection
+- [ ] Tool-call approval policy
+- [ ] Audit log for every companion-initiated action
 
 ## v1.0 — Music environment
 
-- Plugin SDK
-- Shareable visualizer and EQ preset packs
-- Optional network library sources
-- Companion profiles
-- Hardware control protocol for a future physical BounceDeck
-- Stable desktop packaging and signed releases
+- [ ] Plugin SDK
+- [ ] Shareable visualizer and EQ preset packs
+- [ ] Optional network library sources
+- [ ] Companion profiles
+- [ ] Hardware control protocol for a future physical BounceDeck
+- [ ] Stable desktop packaging and signed releases
 
 ## Non-goals for early releases
 

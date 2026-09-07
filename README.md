@@ -2,23 +2,60 @@
 
 **A local-first music player, reactive visualizer, and AI listening companion.**
 
-BounceDeck is the software-first prototype for a modern music appliance inspired by the tactile joy of classic desktop players and reactive visualizers. The player stays deterministic and local. The companion is an optional layer that receives bounded listening context instead of owning playback.
+BounceDeck is the software-first prototype for a modern music appliance inspired by the tactile joy of classic desktop players and reactive visualizers. Playback remains deterministic and local. The companion is optional and receives bounded listening context instead of owning the player.
 
-## v0.1 foundation
+## v0.2 current build
 
-- Local drag/drop audio playback
-- MP3 / WAV / FLAC / OGG-style browser-supported formats
-- Playlist with next/previous navigation
-- Seek, volume, and real three-band Web Audio EQ
+### Music deck
+
+- Local drag/drop session audio
+- Persistent folder-backed music library in Electron
+- MP3 / WAV / FLAC / OGG / M4A / AAC / Opus-style local formats
+- Stable track IDs across library re-sorts and rescans
+- Play/pause, previous/next, seek, volume
+- Real three-band Web Audio EQ
+- Saved volume, EQ, visualizer, personality, and chattiness settings
+- OS media-session integration for play/pause, seek, previous, and next
+
+### Visual system
+
+- **Plasma**: original WebGL fragment shader driven by low/mid/high/RMS analyzer values
 - FFT spectrum visualizer
 - Oscilloscope visualizer
 - Orbital reactive visualizer
-- Full Electron desktop shell
-- Companion chat with Bro / Listener / Producer personalities
+- Fullscreen visualizer mode
+
+### Listening companion
+
+- Bro / Listener / Producer personalities
 - Chattiness control
-- Bounded audio-analysis snapshots (low, mid, high, RMS)
+- Current track + timestamp context
+- Normalized low / mid / high energy + RMS
+- Short rolling analyzer trend summary
 - OpenAI-compatible LLM bridge in Electron main process
 - Honest local-listener fallback when no LLM is configured
+
+## Persistent library boundary
+
+Persistent folders are selected through bounded Electron IPC. Electron stores the private library index under its app-data directory and gives the renderer only public track records.
+
+```text
+Music folders
+     │
+     ▼
+Electron library index
+     │
+     ├── absolute paths stay here
+     │
+     └── track id ──► bounce-media://track/<id>
+                            │
+                            ▼
+                       Audio Engine
+```
+
+The renderer does **not** receive absolute filesystem paths for indexed tracks. The custom media protocol resolves only track IDs already present in the main-process library map.
+
+Filename metadata currently recognizes the common `Artist - Title.ext` convention. Full tag parsing, album fields, and embedded artwork remain future work.
 
 ## Run it
 
@@ -39,6 +76,8 @@ npm run desktop
 
 This builds Vite into `dist/` and opens the Electron shell against the generated files.
 
+> Persistent folder indexing requires the Electron shell. A plain browser/Vite preview can still use session drag/drop audio but has no filesystem library authority.
+
 ## Give the listening buddy an LLM
 
 **Do not put provider keys in Vite variables or renderer source.** BounceDeck reads provider configuration only in Electron's main process.
@@ -52,7 +91,7 @@ $env:BOUNCEDECK_LLM_BASE_URL="https://api.openai.com/v1"
 npm run dev
 ```
 
-Local OpenAI-compatible endpoint (for example a local server exposing `/v1/chat/completions`):
+Local OpenAI-compatible endpoint:
 
 ```powershell
 $env:BOUNCEDECK_LLM_MODEL="your-local-model"
@@ -64,35 +103,45 @@ The key is optional for local endpoints that do not require one.
 
 ### What the companion receives
 
-The companion receives only a bounded context packet from the renderer:
+The companion receives a bounded context packet:
 
 - track display name
 - playback timestamp and duration
 - low / mid / high normalized spectral energy
 - RMS level
+- a short aggregate analyzer window and RMS trend
 - selected personality and chattiness
 - recent companion conversation
 - your current message
 
-It does **not** receive the raw audio file. The system prompt explicitly tells remote models not to pretend otherwise.
+It does **not** receive raw audio or indexed filesystem paths. The system prompt explicitly tells remote models not to pretend they literally heard details absent from the supplied context.
 
-## Design rule
+## Architecture rule
 
 ```text
-Local Files
-    │
-    ▼
-Audio Engine ──► Analyzer ──► Visualizers
-    │                │
-    │                └──────► bounded listening snapshot
-    │                                │
-    ▼                                ▼
-Transport / EQ                 Companion bridge
-                                     │
-                              local fallback or LLM
+                  ┌───────────────────────────┐
+                  │ Electron main process     │
+Music folders ───►│ library index + media IDs │
+                  └────────────┬──────────────┘
+                               │ bounded IPC / media protocol
+                               ▼
+Local session files ───► Audio Engine ───► Deck Event Bus
+                              │                  │
+                              ├──► Visualizers   ├──► analyzer trend window
+                              ├──► Transport     │
+                              └──► EQ            ▼
+                                         Companion bridge
+                                               │
+                                      local fallback or LLM
 ```
 
-The companion does not get direct playback authority in v0.1.
+The companion has **no direct playback, filesystem, or operating-system authority in v0.2**. Future player tools must be exposed individually and intentionally.
+
+## Validation
+
+GitHub Actions runs `npm install`, `tsc --noEmit`, and the Vite production build on `main` and every `bouncdeck-v*` branch.
+
+The dependency install currently reports two high-severity audit findings in the development dependency graph. They are tracked as release-hardening work before BounceDeck is described as packaged-binary ready.
 
 ## Next targets
 
