@@ -55,7 +55,7 @@ export class AudioEngine {
     return this.analyser?.frequencyBinCount ?? 1024;
   }
 
-  readFrequencyData(target: Uint8Array) {
+  readFrequencyData(target: Uint8Array<ArrayBuffer>) {
     if (!this.analyser) {
       target.fill(0);
       return;
@@ -63,7 +63,7 @@ export class AudioEngine {
     this.analyser.getByteFrequencyData(target);
   }
 
-  readTimeData(target: Uint8Array) {
+  readTimeData(target: Uint8Array<ArrayBuffer>) {
     if (!this.analyser) {
       target.fill(128);
       return;
