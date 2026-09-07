@@ -12,7 +12,7 @@
 - [x] Local companion fallback
 - [x] Personality + chattiness controls
 
-## v0.2 — Library and visualizer system
+## v0.2 — Library, visualizer, and web deck system
 
 ### Landed in the v0.2 branch
 
@@ -21,17 +21,18 @@
 - [x] Stable path-derived library track IDs
 - [x] Main-process-only absolute filesystem paths
 - [x] `bounce-media://` id-gated streaming protocol
-- [x] Reduced media-protocol privileges with renderer Fetch API access disabled
 - [x] Filename metadata bootstrap (`Artist - Title`)
 - [x] Typed deck event bus (`analysis`, `playback`, `track`)
 - [x] Rolling bounded analysis summary for companion context
 - [x] First original GPU fragment-shader visualizer (`plasma`)
 - [x] Fullscreen visualizer mode
-- [x] OS media-session controls and seek position
+- [x] OS / browser Media Session controls and seek position
 - [x] Persistent volume / EQ / visualizer / companion settings
 - [x] CI coverage for all `bouncdeck-v*` branches
-- [x] Upgrade desktop runtime to Electron 44.2.0
-- [x] Dependency audit cleanup: 0 vulnerabilities in v0.2 CI
+- [x] MIT license
+- [x] GitHub Pages browser build and Actions deployment workflow
+- [x] Explicit desktop-vs-web capability boundary in the UI
+- [x] Electron 44.2 runtime with zero npm audit vulnerabilities in the v0.2 validation pass
 
 ### Remaining v0.2.x work
 

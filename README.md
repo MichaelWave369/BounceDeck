@@ -4,18 +4,29 @@
 
 BounceDeck is the software-first prototype for a modern music appliance inspired by the tactile joy of classic desktop players and reactive visualizers. Playback remains deterministic and local. The companion is optional and receives bounded listening context instead of owning the player.
 
+## Try the web deck
+
+The GitHub Pages build is designed to run directly in the browser at:
+
+**https://michaelwave369.github.io/BounceDeck/**
+
+The web deck supports local drag/drop audio, EQ, spectrum/scope/orbital/Plasma visualizers, fullscreen mode, Media Session controls, saved browser settings, and the honest local listening companion.
+
+Browser mode is deliberately **session-only** for music files. It does not receive persistent filesystem authority and it does not upload your audio. Persistent folder indexing and the configured remote/local LLM bridge remain desktop Electron capabilities.
+
 ## v0.2 current build
 
 ### Music deck
 
 - Local drag/drop session audio
 - Persistent folder-backed music library in Electron
+- Browser-only GitHub Pages session deck
 - MP3 / WAV / FLAC / OGG / M4A / AAC / Opus-style local formats
 - Stable track IDs across library re-sorts and rescans
 - Play/pause, previous/next, seek, volume
 - Real three-band Web Audio EQ
 - Saved volume, EQ, visualizer, personality, and chattiness settings
-- OS media-session integration for play/pause, seek, previous, and next
+- OS/browser Media Session integration for play/pause, seek, previous, and next
 
 ### Visual system
 
@@ -33,9 +44,9 @@ BounceDeck is the software-first prototype for a modern music appliance inspired
 - Normalized low / mid / high energy + RMS
 - Short rolling analyzer trend summary
 - OpenAI-compatible LLM bridge in Electron main process
-- Honest local-listener fallback when no LLM is configured
+- Honest local-listener fallback in Electron or the browser when no LLM is configured
 
-## Persistent library boundary
+## Desktop persistent-library boundary
 
 Persistent folders are selected through bounded Electron IPC. Electron stores the private library index under its app-data directory and gives the renderer only public track records.
 
@@ -57,7 +68,7 @@ The renderer does **not** receive absolute filesystem paths for indexed tracks. 
 
 Filename metadata currently recognizes the common `Artist - Title.ext` convention. Full tag parsing, album fields, and embedded artwork remain future work.
 
-## Run it
+## Run it locally
 
 Requirements: Node 20.19+.
 
@@ -68,7 +79,7 @@ npm run dev
 
 The first playback click creates the Web Audio graph, which keeps browser autoplay policy happy.
 
-### Production-style local run
+### Production-style desktop run
 
 ```bash
 npm run desktop
@@ -76,9 +87,16 @@ npm run desktop
 
 This builds Vite into `dist/` and opens the Electron shell against the generated files.
 
-> Persistent folder indexing requires the Electron shell. A plain browser/Vite preview can still use session drag/drop audio but has no filesystem library authority.
+### Browser / Pages build
 
-## Give the listening buddy an LLM
+```bash
+npm run build:pages
+npm run preview
+```
+
+GitHub Pages deployment is handled by `.github/workflows/pages.yml` after Pages is configured to use **GitHub Actions** as its source. Pushes to `main` then build and deploy the `dist/` artifact automatically.
+
+## Give the desktop listening buddy an LLM
 
 **Do not put provider keys in Vite variables or renderer source.** BounceDeck reads provider configuration only in Electron's main process.
 
@@ -139,9 +157,13 @@ The companion has **no direct playback, filesystem, or operating-system authorit
 
 ## Validation
 
-GitHub Actions runs `npm install`, `tsc --noEmit`, and the Vite production build on `main` and every `bouncdeck-v*` branch.
+GitHub Actions runs `npm install`, `tsc --noEmit`, the desktop-oriented Vite production build, and the Pages web build on `main` and every `bouncdeck-v*` branch.
 
 The v0.2 validation pass uses Electron 44.2.0 and currently reports **0 npm audit vulnerabilities**. Compile/build success does not replace real desktop playback testing on target operating systems, so packaged release claims remain later work.
+
+## License
+
+BounceDeck is released under the **MIT License**. See [`LICENSE`](LICENSE).
 
 ## Next targets
 

@@ -2,12 +2,19 @@
   "name": "bouncdeck",
   "version": "0.2.0",
   "private": true,
+  "license": "MIT",
   "description": "A local-first music player, reactive visualizer, and AI listening companion.",
+  "homepage": "https://michaelwave369.github.io/BounceDeck/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MichaelWave369/BounceDeck.git"
+  },
   "main": "electron/main.cjs",
   "type": "module",
   "scripts": {
     "dev": "concurrently -k \"vite --host 127.0.0.1\" \"wait-on tcp:5173 && cross-env VITE_DEV_SERVER_URL=http://127.0.0.1:5173 electron .\"",
     "build": "npm run check && vite build",
+    "build:pages": "npm run check && vite build --base=./",
     "check": "tsc --noEmit",
     "preview": "vite preview",
     "desktop": "npm run build && electron ."
