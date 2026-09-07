@@ -9,7 +9,9 @@ export class DeckEventBus {
     const listeners = this.listeners.get(type) ?? new Set<Handler<never>>();
     listeners.add(handler as Handler<never>);
     this.listeners.set(type, listeners);
-    return () => listeners.delete(handler as Handler<never>);
+    return () => {
+      listeners.delete(handler as Handler<never>);
+    };
   }
 
   emit<K extends keyof DeckEvents>(type: K, payload: DeckEvents[K]) {
