@@ -53,7 +53,7 @@ Electron library index
                        Audio Engine
 ```
 
-The renderer does **not** receive absolute filesystem paths for indexed tracks. The custom media protocol resolves only track IDs already present in the main-process library map.
+The renderer does **not** receive absolute filesystem paths for indexed tracks. The custom media protocol resolves only track IDs already present in the main-process library map. Its scheme privileges are restricted to secure, standard streaming behavior; renderer Fetch API access is intentionally not enabled.
 
 Filename metadata currently recognizes the common `Artist - Title.ext` convention. Full tag parsing, album fields, and embedded artwork remain future work.
 
@@ -141,7 +141,7 @@ The companion has **no direct playback, filesystem, or operating-system authorit
 
 GitHub Actions runs `npm install`, `tsc --noEmit`, and the Vite production build on `main` and every `bouncdeck-v*` branch.
 
-The dependency install currently reports two high-severity audit findings in the development dependency graph. They are tracked as release-hardening work before BounceDeck is described as packaged-binary ready.
+The v0.2 validation pass uses Electron 44.2.0 and currently reports **0 npm audit vulnerabilities**. Compile/build success does not replace real desktop playback testing on target operating systems, so packaged release claims remain later work.
 
 ## Next targets
 
